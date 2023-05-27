@@ -54,9 +54,14 @@ perubahan dengan operasi copy biasa.
 1. btrfs subvolume snapshot -r /data/dbs/files /data/.snapshots/dbs_files_20230527_133900
 2. btrfs subvolume show /data/.snapshots/dbs_files_20230527_133900
 
--- menghapus snapshot ---
+--- menghapus snapshot ---
 
 6. btrfs subvolume delete /data/.snapshots/dbs_files_20230527_073900
 7. btrfs subvolume list /data
 8. tree -a /data
+
+--- auto mount ---
+1. lsblk -o NAME,FSTYPE,UUID,MOUNTPOINTS
+2. pico /etc/fstab
+3. isikan baris baru UUID=<UUID> <MOUNTPOINTS> <FSTYPE>  defaults        0       0
 
