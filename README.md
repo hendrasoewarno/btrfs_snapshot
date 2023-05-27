@@ -13,43 +13,50 @@ Langkah-langkah membuat btrfs snapshot
 10. mkdir -v /data/.snapshots
 
 --- writable snapshot ---
+
 11. btrfs subvolume snapshot /data/dbs/files /data/.snapshots/dbs_files_20230527_073900
 12. ls /data/.snapshots
 13. btrfs subvolume list /data
-13. btrfs subvolume show /data/.snapshots/dbs_files_20230527_073900
-14. tree -a /data
-15. cat "hello world new" > /data/dbs/files/satu.txt
-16. cat "hello world new" > /data/dbs/files/dua.txt
-17. cat /data/.snapshots/dbs_files_20230527_073900/satu.txt
-18. cat /data/.snapshots/dbs_files_20230527_073900/dua.txt
+14. btrfs subvolume show /data/.snapshots/dbs_files_20230527_073900
+15. tree -a /data
+16. cat "hello world new" > /data/dbs/files/satu.txt
+17. cat "hello world new" > /data/dbs/files/dua.txt
+18. cat /data/.snapshots/dbs_files_20230527_073900/satu.txt
+19. cat /data/.snapshots/dbs_files_20230527_073900/dua.txt
 
 recover file dari snapshot
-19. cp /data/.snapshots/dbs_files_20230527_073900/satu.txt /data/dbs/files/satu.txt
-20. cat /data/dbs/files/satu.txt
+
+20. cp /data/.snapshots/dbs_files_20230527_073900/satu.txt /data/dbs/files/satu.txt
+21. cat /data/dbs/files/satu.txt
 
 mengupdate data terbaru ke snapshot
-21. cp /data/dbs/files/dua.txt /data/.snapshots/dbs_files_20230527_073900/dua.txt
-22. cat /data/.snapshots/dbs_files_20230527_073900/dua.txt
 
+22. cp /data/dbs/files/dua.txt /data/.snapshots/dbs_files_20230527_073900/dua.txt
+23. cat /data/.snapshots/dbs_files_20230527_073900/dua.txt
 
 mengembalikan keseluruhan snapshot
-23. cat "hello world newest" > /data/dbs/files/satu.txt
-24. cat "Hello world different" > /data/dbs/files/tiga.txt
-25. rsync -avz /data/.snapshots/dbs_files_20230527_073900 /data/dbs/files
-26. tree -a /data
+
+24. cat "hello world newest" > /data/dbs/files/satu.txt
+25. cat "Hello world different" > /data/dbs/files/tiga.txt
+26. rsync -avz /data/.snapshots/dbs_files_20230527_073900 /data/dbs/files
+27. tree -a /data
 
 mengembalikan keseluruhan snapshot (mirror mode, ini akan menghapus tiga.txt)
-27. rsync -avz --delete /data/.snapshots/dbs_files_20230527_073900 /data/dbs/files
-23. tree -a /data
+
+28. rsync -avz --delete /data/.snapshots/dbs_files_20230527_073900 /data/dbs/files
+29. tree -a /data
 
 Kesimpulan, suatu snapshot writable merupakan suatu subvolume, sehingga kita dapat melakukan
 perubahan dengan operasi copy biasa.
 
 --- readonly snapshot (-r) ---
+
 1. btrfs subvolume snapshot -r /data/dbs/files /data/.snapshots/dbs_files_20230527_133900
 2. btrfs subvolume show /data/.snapshots/dbs_files_20230527_133900
 
 -- menghapus snapshot ---
-1. btrfs subvolume delete /data/.snapshots/dbs_files_20230527_073900
-2. btrfs subvolume list /data
-3. tree -a /data
+
+6. btrfs subvolume delete /data/.snapshots/dbs_files_20230527_073900
+7. btrfs subvolume list /data
+8. tree -a /data
+
