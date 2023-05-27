@@ -63,5 +63,5 @@ perubahan dengan operasi copy biasa.
 --- auto mount ---
 1. lsblk -o NAME,FSTYPE,UUID,MOUNTPOINTS
 2. pico /etc/fstab
-3. isikan baris baru UUID=<UUID> <MOUNTPOINTS> <FSTYPE>  defaults        0       0
+3. isikan baris baru UUID=\<UUID\> \<MOUNTPOINTS\> \<FSTYPE\>  defaults        0       0
 
