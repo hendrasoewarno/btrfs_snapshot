@@ -38,12 +38,12 @@ mengembalikan keseluruhan snapshot
 
 24. cat "hello world newest" > /data/dbs/files/satu.txt
 25. cat "Hello world different" > /data/dbs/files/tiga.txt
-26. rsync -avz /data/.snapshots/dbs_files_20230527_073900 /data/dbs/files
+26. rsync -avz /data/.snapshots/dbs_files_20230527_073900/ /data/dbs/files/
 27. tree -a /data
 
 mengembalikan keseluruhan snapshot (mirror mode, ini akan menghapus tiga.txt)
 
-28. rsync -avz --delete /data/.snapshots/dbs_files_20230527_073900 /data/dbs/files
+28. rsync -avz --delete /data/.snapshots/dbs_files_20230527_073900/ /data/dbs/files/
 29. tree -a /data
 
 Kesimpulan, suatu snapshot writable merupakan suatu subvolume, sehingga kita dapat melakukan
