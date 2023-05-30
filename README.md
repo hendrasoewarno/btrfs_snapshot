@@ -24,7 +24,7 @@ Langkah-langkah membuat btrfs snapshot
 18. cat /data/.snapshots/dbs_files_20230527_073900/satu.txt
 19. cat /data/.snapshots/dbs_files_20230527_073900/dua.txt
 
-recover file dari snapshot
+recover file dari snapshot dengan copy
 
 20. cp /data/.snapshots/dbs_files_20230527_073900/satu.txt /data/dbs/files/satu.txt
 21. cat /data/dbs/files/satu.txt
@@ -34,7 +34,7 @@ mengupdate data terbaru ke snapshot
 22. cp /data/dbs/files/dua.txt /data/.snapshots/dbs_files_20230527_073900/dua.txt
 23. cat /data/.snapshots/dbs_files_20230527_073900/dua.txt
 
-mengembalikan keseluruhan snapshot
+mengembalikan keseluruhan snapshot dengan rsync
 
 24. cat "hello world newest" > /data/dbs/files/satu.txt
 25. cat "Hello world different" > /data/dbs/files/tiga.txt
@@ -46,8 +46,19 @@ mengembalikan keseluruhan snapshot (mirror mode, ini akan menghapus tiga.txt)
 28. rsync -avz --delete /data/.snapshots/dbs_files_20230527_073900/ /data/dbs/files/
 29. tree -a /data
 
+mengembalikan data dengan mount berdasarkan VolId
+
+30. umount /data
+31. btrfs subvolume list /data
+32. catat id subvolume yang akan dikembalikan, misalkan 261
+33. mkdir /data/dbs/files
+34. mount -o subvolid=<id subvolume> /data/.snapshot/dbs_files_20230527_073900 /data/dbs/files
+35. mount -o subvolid=361 /data/.snapshot/dbs_files_20230527_073900 /data/dbs/files
+36. cat /data/dbs/files/satu.txt
+
 Kesimpulan, suatu snapshot writable merupakan suatu subvolume, sehingga kita dapat melakukan
-perubahan dengan operasi copy biasa.
+perubahan dengan operasi copy biasa, rsync, maupun cukup melakukan mount dengan menggunakan
+subvolid.
 
 --- readonly snapshot (-r) ---
 
