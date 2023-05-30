@@ -24,7 +24,7 @@ Langkah-langkah membuat btrfs snapshot
 18. cat /data/.snapshots/dbs_files_20230527_073900/satu.txt
 19. cat /data/.snapshots/dbs_files_20230527_073900/dua.txt
 
-recover file dari snapshot dengan copy
+mengembalikan file dari snapshot dengan copy
 
 20. cp /data/.snapshots/dbs_files_20230527_073900/satu.txt /data/dbs/files/satu.txt
 21. cat /data/dbs/files/satu.txt
