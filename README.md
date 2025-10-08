@@ -86,45 +86,66 @@ sudo systemctl stop mariadb
 sudo mv /var/lib/mysql /var/lib/mysql.old
 ```
 ## buat subvolume baru
+```
 sudo btrfs subvolume create /var/lib/mysql
+```
 ## copy dari old ke subvolume baru
+```
 sudo cp -a /var/lib/mysql.old/* /var/lib/mysql/
 sudo rm -rf /var/lib/mysql.old
 sudo systemctl start mariadb
+```
 
 #membuat snapshot harian
+```
 sudo systemctl stop mariadb
 sudo btrfs subvolume snapshot -r /var/lib/mysql /btrfs-snapshots/mysql-$(date +%Y%m%d-%H%M%S)
 sudo systemctl start mariadb
+```
 
 #menampilkan daftar subvolume snapshot
+```
 sudo btrfs subvolume list /
+```
 
 #menampilkan isi subvolume snapshot tertentu
+```
 ls /btrfs-snapshots/mysql-20251008-090000
+```
 
 #menghapus snapshot yang tidak dibutuhkan lagi (melepas kapasitas drive)
+```
 sudo btrfs subvolume delete /btrfs-snapshots/mysql-20251001-120000
+```
 
 #memeriksa kapasitas drive
+```
 sudo btrfs filesystem du -s /var/lib/mysql /btrfs-snapshots/*
+```
 
 #restore ke snapshot tertentu
+```
 sudo systemctl stop mariadb
 sudo systemctl is-active mariadb
+```
 ##backup subvolume saat ini
+```
 sudo btrfs subvolume snapshot -r /var/lib/mysql /btrfs-snapshots/mysql-before-rollback-$(date +%Y%m%d-%H%M%S)
+```
 
 ##hapus subvolume saat ini
+```
 sudo btrfs subvolume delete /var/lib/mysql
-
+```
 ##kembalikan dari snapshot ke /var/lib/mysql
+```
 sudo btrfs subvolume snapshot /btrfs-snapshots/mysql-20251008-090000 /var/lib/mysql
+```
 
 ##pulihkan ownership jika perlu
+```
 sudo chown -R mysql:mysql /var/lib/mysql
 sudo systemctl start mariadb
 sudo systemctl start mariadb
-
-
+```
 
