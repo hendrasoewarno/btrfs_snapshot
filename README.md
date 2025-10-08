@@ -81,8 +81,10 @@ subvolid.
 sudo btrfs subvolume list /
 
 #membuat subvolume btrfs
+```
 sudo systemctl stop mariadb
 sudo mv /var/lib/mysql /var/lib/mysql.old
+```
 ## buat subvolume baru
 sudo btrfs subvolume create /var/lib/mysql
 ## copy dari old ke subvolume baru
