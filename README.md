@@ -91,7 +91,7 @@ sudo btrfs subvolume create /var/lib/mysql
 ```
 ## copy dari old ke subvolume baru
 ```
-sudo cp -a /var/lib/mysql.old/* /var/lib/mysql/
+sudo cp -a /var/lib/mysql.old/. /var/lib/mysql/
 sudo rm -rf /var/lib/mysql.old
 sudo systemctl start mariadb
 ```
@@ -103,6 +103,29 @@ sudo btrfs subvolume snapshot -r /var/lib/mysql /btrfs-snapshots/mysql-$(date +%
 sudo systemctl start mariadb
 ```
 
+#atau snapshot pakai cron
+```
+#!/bin/bash
+
+# Konfigurasi
+SNAP_NAME="/btrfs-snapshots/mysql-$(date +%Y%m%d-%H%M%S)"
+DB_USER="root"
+DB_PASS="password_mariadb_anda"
+
+# Eksekusi FTWRL, Btrfs Snapshot, dan UNLOCK TABLES dalam 1 sesi koneksi
+mariadb -u$DB_USER -p$DB_PASS <<EOF
+-- 1. Kunci semua tabel dan flush data memori ke disk
+FLUSH TABLES WITH READ LOCK;
+
+-- 2. Jalankan perintah Btrfs snapshot dari dalam MariaDB CLI menggunakan perintah 'system'
+system sudo btrfs subvolume snapshot -r /var/lib/mysql $SNAP_NAME;
+
+-- 3. Buka kuncian kembali
+UNLOCK TABLES;
+EOF
+
+echo "Snapshot Btrfs berhasil dibuat tanpa mematikan MariaDB: $SNAP_NAME"
+```
 #menampilkan daftar subvolume snapshot
 ```
 sudo btrfs subvolume list /
